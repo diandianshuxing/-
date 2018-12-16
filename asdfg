@@ -1,0 +1,335 @@
+// 要求 1 教师号 2 姓名 3 性别 4  职称 5 工资 6 单位
+//  程序功能 1 输入一个数据 2 显示数据 3查找数据 4 增加数据 5 删除数据 6 退出
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+typedef struct //定义结构数组 方便起名字 把struct 起个名字
+{
+
+    char number[20] ;
+    char name[20];
+    char sex[5];
+    char title[20];
+    int wage;
+    char unit[40];
+
+} teacher;
+teacher stu[80];
+int menu_select()//菜单函数
+{
+    char c;
+    do
+    {
+        system("cls");
+        system("color 74");
+        printf("\t\t\t __________________________________________\n");
+        printf("\t\t\t |teacher information management system   |\n");
+        printf("\t\t\t | 1. Input Records                       |\n");//输入数据
+        printf("\t\t\t | 2. Display All Records       ^_^       | \n");//显示所有数据
+        printf("\t\t\t | 3. Delete a Record                     |\n");//删除数据
+        printf("\t\t\t | 4. Statistic                           |\n");//求平均值
+        printf("\t\t\t | 5. found                               |\n"); //查找
+        printf("\t\t\t | 6. Quit                                |\n");//退出
+        printf("\t\t\t | hey man please give you chose 1-6:     |\n");
+        printf("\t\t\t |________________________________________|");
+        c=getchar();
+    }
+    while(c<'1'||c>'6');
+    return(c-'0');
+}
+int Input(teacher stud[],int n) //输入若干条记录
+{
+
+    int i=0;
+    char sign,x[20]; //[20]为清除多余的数据所用
+    while(sign!='n'&&sign!='N') //判断
+    {
+        printf("\t\t\tteacher's number:"); //交互输入
+        scanf("\t\t\t%s",stud[n+i].number);
+        printf("\t\t\tteacher's name:");
+        scanf("\t\t\t%s",stud[n+i].name);
+        printf("\t\t\tteacher's sex:");
+        scanf("\t\t\t%s",stud[n+i].sex);
+        printf("\t\t\tteacher's title:");
+        scanf("\t\t\t%s",stud[n+i].title);
+        printf("\t\t\tteacher's wage:");
+        scanf("\t\t\t%d",&stud[n+i].wage);
+        printf("\t\t\tteacher's unit:");
+        scanf("\t\t\t%s",stud[n+i].unit);
+        gets(x); //清除多余的输入
+        printf("\t\t\tany more records?(Y/N)");
+        scanf("\t\t\t%c",&sign); //输入判断
+        i++;
+    }
+    return(n+i);
+}
+void Display (teacher stud[],int n)//显示所有记录
+{
+    int i,j,*p,*q,s;
+    char t[20];
+    for(i=0; i<n-1; i++) //冒泡法排序
+        for(j=0; j<n-1-i; j++)
+            if(strcmp(stud[j].number,stud[j+1].number)>0)
+            {
+                strcpy(t,stud[j+1].number);
+                strcpy(stud[j+1].number,stud[j].number);
+                strcpy(stud[j].number,t);
+                strcpy(t,stud[j+1].name);
+                strcpy(stud[j+1].name,stud[j].name);
+                strcpy(stud[j].name,t);
+                strcpy(t,stud[j+1].sex);
+                strcpy(stud[j+1].sex,stud[j].sex);
+                strcpy(stud[j].sex,t);
+                strcpy(t,stud[j+1].title);
+                strcpy(stud[j+1].title,stud[j].title);
+                strcpy(stud[j].title,t);
+                strcpy(t,stud[j+1].unit);
+                strcpy(stud[j+1].unit,stud[j].unit);
+                strcpy(stud[j].unit,t);
+                p=&stud[j+1].wage;
+                q=&stud[j].wage;
+                s=*p;
+                *p=*q;
+                *q=s;
+
+            }
+    for(i=0; i<n; i++)
+    {
+        printf("\t\t\tnumber:%s",stud[i].number);
+        printf("\t\t\tname:%s",stud[i].name);
+        printf("\t\t\tsex:%s",stud[i].sex);
+        printf("\t\t\ttitle:%s\n",stud[i].title);
+        printf("\t\t\twage:%d",stud[i].wage);
+        printf("\t\t\tunit:%s\n",stud[i].unit);
+    }
+    printf("\t\t\t————————————————————————————————————————————————————————————————————\n");
+    printf("\t\t\t\n");
+    printf("\t\t\t————————————————————————————————————————————————————————————————————\n");
+    system("pause");
+}
+
+int delet(teacher stud[],int n) //按姓名查找，删除一条记录
+{
+    char w[20];
+    int i=0,j;
+    printf("\t\t\ttell me his(her) name:");
+    scanf("%s",w);
+    while(strcmp(stud[i].name,w)!=0&&i<n)
+        i++; //查找判断
+    if(i==n)
+    {
+        printf("\t\t\tnot find!\n"); //返回失败信息
+        return(n);
+    }
+    for(j=i; j<n-1; j++) //删除操作
+    {
+        strcpy(stud[j].number,stud[j+1].number);
+        strcpy(stud[j].name,stud[j+1].name);
+        strcpy(stud[j].title,stud[j+1].title);
+        strcpy(stud[j].sex,stud[j+1].sex);
+        strcpy(stud[j].unit,stud[j+1].unit);
+        stud[j].wage=stud[j+1].wage;
+    }
+    printf("\t\t\tDelete Successed!\n"); //返回成功信息
+    return(n-1);
+}
+int del(teacher stud[],int n) //按姓名查找，删除一条记录
+{
+    char s[20];
+    int i=0,j;
+    printf("\t\t\ttell me his(her) number:");
+    scanf("%s",s);
+    while(strcmp(stud[i].number,s)!=0&&i<n) i++; //查找判断
+    if(i==n)
+    {
+        printf("\t\t\tnot find!\n"); //返回失败信息
+        return(n);
+    }
+    for(j=i; j<n-1; j++) //删除操作
+    {
+        strcpy(stud[j].number,stud[j+1].number);
+        strcpy(stud[j].name,stud[j+1].name);
+        strcpy(stud[j].title,stud[j+1].title);
+        strcpy(stud[j].sex,stud[j+1].sex);
+        strcpy(stud[j].unit,stud[j+1].unit);
+        stud[j].wage=stud[j+1].wage;
+    }
+    printf("\t\t\tDelete Successed!\n"); //返回成功信息
+    return(n-1);
+}
+void Statistic(teacher stud[],int n) //新增功能，输出统计信息
+{
+    int i,j=0,k=0,sum=0;
+    float aver; //工资平均值
+    for(i=0; i<n; i++) //循环输入判断
+    {
+        sum+=stud[i].wage;
+        if(stud[j].wage>stud[i].wage) j=i;
+        if(stud[k].wage<stud[i].wage) k=i;
+    }
+    aver=1.0*sum/n;
+    printf("\t\t\tthere are %d records.\n",n); //总共记录数
+    printf("\t\t\tthe hignest wage:\n"); //最高工资
+    printf("\t\t\tnumber:%s name:%s wage:%d\n",stud[j].number,stud[j].name,stud[j].wage);
+    printf("\t\t\tthe lowest wage:\n"); //最低工资
+    printf("\t\t\tnumber:%s name:%s wage:%d\n",stud[k].number,stud[k].name,stud[k].wage);
+    printf("\t\t\tthe average wage is %5.2f\n",aver); //平均工资
+}
+void found(teacher stud[],int n) //查找并显示一个记录
+{
+    char s[20];
+    int i=0;
+    printf("\t\t\tinput his(her) name:"); //交互式输入
+    scanf("\t\t\t%s",s);
+    while(strcmp(stud[i].name,s)!=0&&i<n) i++; //查找判断
+    if(i==n)
+    {
+        printf("\t\t\tnot find!\n"); //输入失败信息
+        return;
+
+    }
+    printf("\t\t\this(her) number:%s\n",stud[i].number); //输出该学生信息
+    printf("\t\t\this(her) score:%s\n",stud[i].name);
+    printf("\t\t\this(her) score:%s\n",stud[i].sex);
+    printf("\t\t\this(her) score:%s\n",stud[i].title);
+    printf("\t\t\this(her) score:%d\n",stud[i].unit);
+
+}
+void main()
+
+{
+    char a,b;
+    int d;
+    int n=0;
+    system("color 15");
+    printf("\t\t\t|---------------------------------------|\n");
+    printf("\t\t\t|welcome to the teacher system          |\n");
+    printf("\t\t\t|---------------------------------------|\n");
+    printf("\t\t\t        0 0 00 0 0          \n ");
+    printf("\t\t\t       0 M     M 0\n");
+    printf("\t\t\t       0    B    0\n");
+    printf("\t\t\t        0 0 0 0 0  \n");
+    printf("\t\t\t        Q        Q\n");
+    printf("\t\t\t       Q           Q\n");
+    system("pause");
+    system("cls");
+
+    for(;;)
+    {
+
+        switch(menu_select())
+        {
+        case 1:
+            system("cls");
+            printf("\t\t\t|————————————————————————————————————————————————————————————————————|\n");
+            printf("\t\t\t|please input records                                                |\n");
+            printf("\t\t\t|————————————————————————————————————————————————————————————————————|\n");
+            n=Input(stu,n);
+            break;
+        case 2:
+            system("cls");
+            printf("\t\t\t|————————————————————————————————————————————————————————————————————|\n");
+            printf("\t\t\t| display all records                                                |\n");
+            printf("\t\t\t|————————————————————————————————————————————————————————————————————|\n");
+            Display(stu,n);
+            break;
+        case 3:
+            system("cls");
+            printf("\t\t\t|————————————————————————————————————————————————————————————————————|\n");
+            printf("\t\t\t|are you sure?  i will give you a change please input y(Y) or n(N)   |\n");
+            printf("\t\t\t|————————————————————————————————————————————————————————————————————|\n");
+
+            scanf("%s",&b);
+            if(b!='n'&&b!='N')
+            {
+
+
+                printf("\t\t\tDelete a Record\n");
+                printf("\t\t\t 1.name\n");
+                printf("\t\t\t 2.number\n");
+                printf("\t\t\t  hey man choose one \n");
+                scanf("%d",&d);
+                if(d==1)
+                {
+                    n=delet(stu,n); //按姓名查找，删除一条记录
+                    printf("\t\t\t————————————————————————————————————————————————————————————————————\n");
+                    printf("\t\t\t\n");
+                    printf("\t\t\t————————————————————————————————————————————————————————————————————\n");
+                    system("pause");
+                    break;
+                }
+                else
+                {
+                    n=del(stu,n); //按学号查找，删除一条记录
+                    printf("\t\t\t————————————————————————————————————————————————————————————————————\n");
+                    printf("\t\t\t\n");
+                    printf("\t\t\t————————————————————————————————————————————————————————————————————\n");
+                    system("pause");
+                    break;
+
+                }
+            }
+            else
+            {
+                printf("\t\t\t————————————————————————————————————————————————————————————————————\n");
+                printf("\t\t\t\n");
+                printf("\t\t\t————————————————————————————————————————————————————————————————————\n");
+                system("pause");
+                break;
+            }
+        case 4:
+            system("cls");
+            printf("\t\t\t|————————————————————————————————————————————————————————————————————|\n");
+            printf("\t\t\t|Statistic                                                           |\n");
+            printf("\t\t\t|————————————————————————————————————————————————————————————————————|\n");
+            Statistic(stu,n); //新增功能，输出统计信息
+            printf("\t\t\t————————————————————————————————————————————————————————————————————\n");
+            printf("\t\t\t\n");
+            printf("\t\t\t————————————————————————————————————————————————————————————————————\n");
+            system("pause");
+            break;
+        case 5:
+            system("cls");
+            printf("\t\t\t|————————————————————————————————————————————————————————————————————|\n");
+            printf("\t\t\t|found                                                               |\n");
+            printf("\t\t\t|————————————————————————————————————————————————————————————————————|\n");
+            found(stu,n);
+            printf("\t\t\t————————————————————————————————————————————————————————————————————\n");
+            printf("\t\t\t\n");
+            printf("\t\t\t————————————————————————————————————————————————————————————————————\n");
+            system("pause");
+            break;
+        case 6:
+            system("cls");
+            printf("\t\t\t|————————————————————————————————————————————————————————————————————|\n");
+            printf("\t\t\t|are you sure?  i will give you a change please input y(Y) or n(N)   |\n");
+            printf("\t\t\t|————————————————————————————————————————————————————————————————————|\n");
+
+            scanf("%s",&a);
+            if(a!='n'&&a!='N')
+            {
+                printf("\t\t\t hahahhahahahah   good luck man  Bye-bye!\n"); //结束程序
+                printf("\t\t\t————————————————————————————————————————————————————————————————————\n");
+                printf("\t\t\t\n");
+                printf("\t\t\t————————————————————————————————————————————————————————————————————\n");
+                printf("\t\t\t        0 0 00 0 0          \n ");
+                printf("\t\t\t       0 M     M 0\n");
+                printf("\t\t\t       0    B    0\n");
+                printf("\t\t\t        0 0 0 0 0  \n");
+                printf("\t\t\t        Q        Q\n");
+                printf("\t\t\t       Q           Q\n");
+                system("pause");
+                exit(0);
+            }
+            else
+            {
+                printf("\t\t\t————————————————————————————————————————————————————————————————————\n");
+                printf("\t\t\t\n");
+                printf("\t\t\t————————————————————————————————————————————————————————————————————\n");
+
+                system("pause");
+                break;
+            }
+        }
+    }
+}
